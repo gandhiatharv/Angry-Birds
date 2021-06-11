@@ -111,7 +111,7 @@ noStroke();
 textSize(35);
 fill("white");
     text("Score: " + score, width-300, 50)
-
+            text(g, 480, 50);
 
     refresh.mousePressed(reset);
     Engine.update(engine);
@@ -153,7 +153,6 @@ fill("white");
         if(birds.length > 0){
             fill(146, 42, 42);
             g = "Press space for next bird.";
-            text(g, 480, 50);
         }else{
             losesound.play();
           gameState = "end";

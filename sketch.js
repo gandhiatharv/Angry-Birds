@@ -150,7 +150,7 @@ fill("white");
         winsound.play();
         gameState = "end";
     }
-    if(gameState === "launched" && g = 0){
+    if(gameState === "launched" && g === 0){
         if(birds.length > 0){
             fill(146, 42, 42);
             text("Press space for next bird.", 480, 50);

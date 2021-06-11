@@ -47,7 +47,7 @@ const Constraint = Matter.Constraint;
 var engine, world;
 var a = 0;
 var b = 1;
-var g = 0;
+var g = " ";
 var box1, pig1;
 var backgroundImg,platform;
 var bird, slingShot;
@@ -146,22 +146,22 @@ fill("white");
     bird2.displaytrajectory();
 
     if(score > 200) {
-        g = 1;
         winsound.play();
         gameState = "end";
     }
-    if(gameState === "launched" && g === 0){
+    if(gameState === "launched"){
         if(birds.length > 0){
             fill(146, 42, 42);
-            text("Press space for next bird.", 480, 50);
+            g = "Press space for next bird.";
+            text(g, 480, 50);
         }else{
-            g = 1;
             losesound.play();
           gameState = "end";
                 }
     }
 
     if (gameState === "end") {
+        g = " ";
         if (score > 200) {
         fill(146, 42, 42);
         text("You win!", 450, 50);
@@ -201,6 +201,7 @@ function keyPressed(){
      bird1.trajectory = [];
      bird2.trajectory = [];
      birdselectsound.play();
+        g = " ";
 gameState = "onSling";
     }
 }

@@ -47,6 +47,7 @@ const Constraint = Matter.Constraint;
 var engine, world;
 var a = 0;
 var b = 1;
+var g = 0;
 var box1, pig1;
 var backgroundImg,platform;
 var bird, slingShot;
@@ -145,14 +146,16 @@ fill("white");
     bird2.displaytrajectory();
 
     if(score > 200) {
+        g = 1;
         winsound.play();
         gameState = "end";
     }
-    if(gameState === "launched"){
+    if(gameState === "launched" && g = 0){
         if(birds.length > 0){
             fill(146, 42, 42);
             text("Press space for next bird.", 480, 50);
         }else{
+            g = 1;
             losesound.play();
           gameState = "end";
                 }

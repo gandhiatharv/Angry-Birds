@@ -47,6 +47,7 @@ const Constraint = Matter.Constraint;
 var engine, world;
 var a = 0;
 var b = 1;
+var c = 2;
 var g = " ";
 var box1, pig1;
 var backgroundImg,platform;
@@ -56,6 +57,9 @@ var birds = [];
 var bird1, bird2;
 var bg = "sprites/bg.png";
 var score = 0;
+var pigsDestroyed = 2;
+var h = " ";
+var i = " ";
 var birdselectsound, birdflysound, winsound, losesound;
 
 function preload() {
@@ -64,6 +68,7 @@ function preload() {
     birdselectsound = loadSound("sounds_bird_select.mp3");
     winsound = loadSound("win.wav");
     losesound = loadSound("loss.wav");
+    bg = loadImage("sprites/bg.png");
 }
 
 function setup(){
@@ -99,19 +104,24 @@ function setup(){
     birds.push(bird);
     refresh = createImg("sprites/refresh.png");
     refresh.position(15, 10);
+    birds.length = 3;
 
     //log6 = new Log(230,180,80, PI/2);
     slingshot = new SlingShot(bird.body,{x:200, y:50});
 }
 
 function draw(){
-    if(backgroundImg)
+    
+   if(backgroundImg)
     background(backgroundImg);
+    
 noStroke();
 textSize(35);
-fill("white");
-    text("Score: " + score, width-300, 50)
-            text(g, 480, 50);
+fill(146, 42, 42);
+    text("Score: " + score, width-200, 50)
+            text(g, 360, 50);
+            text(h, 450, 50);
+            text(i, 310, 85);
 
     refresh.mousePressed(reset);
     Engine.update(engine);
@@ -146,39 +156,46 @@ fill("white");
     bird2.displaytrajectory();
 
     if(score > 200) {
+        if(pigsDestroyed === 2){
         winsound.play();
+        pigsDestroyed = 0;
+        }
         gameState = "end";
+        g = " ";
+        fill(146, 42, 42);
+        text("You win!", 450, 50);
+        text("Press reload to play again.", 310, 85);
+        h = " ";
+        i = " ";
     }
     if(gameState === "launched"){
         if(birds.length > 0){
             fill(146, 42, 42);
             g = "Press space for next bird.";
-        }else{
+        }else if(birds.length <= 0 && c === 2){
             losesound.play();
+            c = 1;
           gameState = "end";
                 }
     }
 
     if (gameState === "end") {
         g = " ";
-        if (score > 200) {
+         if(score <= 200){
         fill(146, 42, 42);
-        text("You win!", 450, 50);
-        text("Press reload to play again.", 310, 85);
-        } else{
-        fill(146, 42, 42);
-        text("You lose!", 450, 50);
-        text("Press reload to play again.", 310, 85);
+        h = "You lose!";
+        i = "Press reload to play again.";
         }
     }
 }
 
 function mouseDragged(){
-    if(mouseX >=0 &&mouseX<200&&gameState!=="launched"){
+    if(gameState!= "end"){
+    if(mouseX >=0 &&mouseX<200){
         Matter.Body.setPosition(birds[birds.length-1].body, {x: mouseX , y: mouseY});
         birdflysound.play();
     }
-
+    }
 }
 
 
@@ -205,17 +222,20 @@ gameState = "onSling";
     }
 }
 
-async function getBackgroundImg() {
-    var response = await fetch("http://worldclockapi.com/api/json/est/now");
+async function getBackgroundImg(){
+    var response = await fetch("http://worldtimeapi.org/api/timezone/America/New_York");
     var responseJSON = await response.json();
-    console.log(responseJSON);
-    var datetime = responseJSON.currentDateTime;
-    var hour = datetime.slice(11, 13);
-    if (hour>=06 && hour<= 19){
+
+    var datetime = responseJSON.datetime;
+    var hour = datetime.slice(11,13);
+    console.log(hour);
+    if(hour>=6 && hour<=18){
         bg = "sprites/bg.png";
-    } else{
+    }
+    else{
         bg = "sprites/bg2.jpg";
     }
+
     backgroundImg = loadImage(bg);
     console.log(backgroundImg);
 }
